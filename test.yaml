@@ -1,7 +1,6 @@
 credential-providers:
-    - GCP
-    - AWS
-    - Kubernetes
+  # - GCP
+  - Env
 constraints:
     - all-are-unique:
         pattern: ALL
