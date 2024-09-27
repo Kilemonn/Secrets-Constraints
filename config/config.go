@@ -64,9 +64,7 @@ func getProviders(credProviders []interface{}) (credentialProviders []credential
 		if !providerId.IsValid() {
 			fmt.Printf("Failed to register credential provider with name [%s], pleaese provide only valid provider names.\n", val)
 		} else {
-			provider := credential_provider.CredentialProvider{
-				Identifier: providerId,
-			}
+			provider := credential_provider.NewCredentialProvider(providerId)
 			credentialProviders = append(credentialProviders, provider)
 			fmt.Printf("Registered credential provider with ID [%s].\n", providerId.String())
 		}

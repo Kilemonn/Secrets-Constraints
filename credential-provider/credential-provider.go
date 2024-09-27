@@ -62,15 +62,24 @@ func IsValidProvider(providerName string) bool {
 
 type CredentialProvider struct {
 	Identifier CredentialProviderIdentifier
+	Provider   Provider
 }
 
-type Credential struct {
-	Name  string
-	Value string
+func NewCredentialProvider(id CredentialProviderIdentifier) (provider CredentialProvider) {
+	provider.Identifier = id
+
+	if id == CredentialProviderIdentifierENV {
+		provider.Provider = NewEnvironmentProvider()
+	} else {
+		provider.Provider = NewNoOpProvider()
+	}
+
+	return
 }
 
 type Provider interface {
-	GetCredentials() []Credential
+	initialiseProvider()
+	GetCredentials() map[string]string
 	GetCredentialNames() []string
 	GetCredentialWithName(string) string
 }
