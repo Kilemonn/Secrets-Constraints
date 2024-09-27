@@ -1,0 +1,20 @@
+credential-providers:
+    - GCP
+    - AWS
+    - Kubernetes
+constraints:
+    - all-are-unique:
+        pattern: ALL
+        condition: UNIQUE
+    - db-strings-have-prefix:
+        pattern: db-connection-string-*+
+        condition: HasPrefix(jdbc://a.domain.to.db/)
+    - has-test-suffix:
+        pattern: test-param-*+
+        condition: HasSuffix(test)
+    - ports-are-numeric:
+        pattern: "-port"
+        condition: IsNumeric
+    - debug-is-boolean:
+        pattern: debug
+        condition: IsBoolean

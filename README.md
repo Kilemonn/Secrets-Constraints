@@ -14,6 +14,11 @@ The constraints that are supported are:
 
 Examples:
 ``` yaml
+credential-providers:
+    - GCP
+    - AWS
+    - Kubernetes:
+        ...
 constraints:
     - all-are-unique:
         pattern: ALL
