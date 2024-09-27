@@ -25,10 +25,10 @@ func TestPatternMatches(t *testing.T) {
 		} else {
 			assert.NotNil(t, pattern.regex)
 			for _, test := range c.successTests {
-				assert.True(t, pattern.matches(test))
+				assert.True(t, pattern.Matches(test))
 			}
 			for _, test := range c.failTests {
-				assert.False(t, pattern.matches(test))
+				assert.False(t, pattern.Matches(test))
 			}
 		}
 	}

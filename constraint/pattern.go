@@ -26,7 +26,7 @@ func NewPattern(p string) (pattern Pattern) {
 	return
 }
 
-func (p Pattern) matches(input string) bool {
+func (p Pattern) Matches(input string) bool {
 	if p.pattern == all_pattern {
 		return true
 	}
