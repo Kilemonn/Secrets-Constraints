@@ -25,12 +25,12 @@ func main() {
 	}
 
 	failedConstraints := validator.ExecuteConstraintsAgainstProviders(providers, constraints)
-	if err != nil {
+	if len(failedConstraints) > 0 {
 		fmt.Printf("Validation failed, the following constraints failed on the following entries:\n")
 		for key, val := range failedConstraints {
-			fmt.Printf("Constraint name [%s]\n", key)
+			fmt.Printf("Constraint name: [%s]:\n", key)
 			for _, v := range val {
-				fmt.Printf("\tCredential name [%s]\n", v)
+				fmt.Printf("\tFailed - Credential name: [%s]\n", v)
 			}
 			fmt.Println("")
 		}

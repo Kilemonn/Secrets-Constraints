@@ -6,10 +6,10 @@ constraints:
         pattern: ALL
         condition: UNIQUE
     - db-strings-have-prefix:
-        pattern: db-connection-string-*+
+        pattern: db-connection-string-.*
         condition: HasPrefix(jdbc://a.domain.to.db/)
     - has-test-suffix:
-        pattern: test-param-*+
+        pattern: test-param-.*
         condition: HasSuffix(test)
     - ports-are-numeric:
         pattern: "-port"
@@ -17,3 +17,6 @@ constraints:
     - debug-is-boolean:
         pattern: debug
         condition: IsBoolean
+    - vscode-properties:
+        pattern: VSCODE_.*
+        condition: IsNumeric

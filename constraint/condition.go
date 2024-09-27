@@ -17,6 +17,12 @@ const (
 	ConditionTypeIsBoolean ConditionType = iota
 )
 
+var (
+	// TODO: Create a new instance for each different constraint definition that uses Unique
+	// Need to create and hold this variable, since it's state needs to be retained
+	uniqueConditionAction UniqueConditionAction = UniqueConditionAction{}
+)
+
 func ConditionTypeFromString(input string) ConditionType {
 	index := slices.Index(conditionTypeStrings(), strings.ToLower(input))
 	if index == -1 {
@@ -42,6 +48,21 @@ type Condition struct {
 func (c ConditionType) expectedArgsCount() uint {
 	args := []uint{0, 0, 1, 1, 0, 0}
 	return args[uint(c)]
+}
+
+func (c ConditionType) conditionActions() []ConditionAction {
+	return []ConditionAction{
+		InvalidConditionAction{},
+		uniqueConditionAction,
+		HasPrefixConditionAction{},
+		HasSuffixConditionAction{},
+		IsNumericConditionAction{},
+		IsBooleanConditionAction{},
+	}
+}
+
+func (c ConditionType) getConditionAction() ConditionAction {
+	return c.conditionActions()[uint(c)]
 }
 
 func NewCondition(conditionString string) (condition Condition, err error) {
@@ -94,4 +115,8 @@ func getArguments(arg string, expectedArgsCount uint) (args []string, err error)
 		args = append(args, strings.TrimSpace(split[i]))
 	}
 	return
+}
+
+func (c Condition) ApplyCondition(input string) bool {
+	return c.Type.getConditionAction().CheckCondition(input, c.Args)
 }

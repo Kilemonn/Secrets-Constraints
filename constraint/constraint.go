@@ -2,7 +2,7 @@ package constraint
 
 type Constraint struct {
 	Name      string
-	Pattern   string
+	Pattern   Pattern
 	Condition Condition
 }
 
@@ -11,9 +11,13 @@ func NewConstraint(name string, pattern string, condition string) (constraint Co
 	if err != nil {
 		return
 	}
+	patternObj, err := NewPattern(pattern)
+	if err != nil {
+		return
+	}
 	return Constraint{
 		Name:      name,
-		Pattern:   pattern,
+		Pattern:   patternObj,
 		Condition: conditionObj,
 	}, nil
 }

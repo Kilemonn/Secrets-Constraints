@@ -19,11 +19,11 @@ func TestPatternMatches(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		pattern := NewPattern(c.regex)
+		pattern, err := NewPattern(c.regex)
 		if c.expectsError {
-			assert.Nil(t, pattern.regex)
+			assert.Error(t, err)
 		} else {
-			assert.NotNil(t, pattern.regex)
+			assert.NoError(t, err)
 			for _, test := range c.successTests {
 				assert.True(t, pattern.Matches(test))
 			}

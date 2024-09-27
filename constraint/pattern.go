@@ -14,12 +14,11 @@ type Pattern struct {
 	regex   *regexp.Regexp
 }
 
-func NewPattern(p string) (pattern Pattern) {
+func NewPattern(p string) (pattern Pattern, err error) {
 	pattern.pattern = p
 	regex, err := regexp.Compile(pattern.pattern)
 	if err != nil {
 		fmt.Printf("Failed to compile regex pattern: [%s].\n", err.Error())
-		pattern.pattern = ""
 	} else {
 		pattern.regex = regex
 	}
