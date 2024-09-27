@@ -5,8 +5,8 @@ import (
 	credential_provider "github.com/Kilemonn/Secrets-Constraints/credential-provider"
 )
 
-func ExecuteConstraintsAgainstProviders(providers []credential_provider.CredentialProvider, constraints []constraint.Constraint) (failed map[string][]string) {
-	failed = make(map[string][]string)
+func ExecuteConstraintsAgainstProviders(providers []credential_provider.CredentialProvider, constraints []constraint.Constraint) map[string][]string {
+	failed := make(map[string][]string)
 
 	for _, provider := range providers {
 		for _, credentialName := range provider.Provider.GetCredentialNames() {
@@ -25,5 +25,5 @@ func ExecuteConstraintsAgainstProviders(providers []credential_provider.Credenti
 			}
 		}
 	}
-	return
+	return failed
 }
