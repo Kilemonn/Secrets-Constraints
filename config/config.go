@@ -6,6 +6,7 @@ import (
 
 	"github.com/Kilemonn/Secrets-Constraints/constraint"
 	credential_provider "github.com/Kilemonn/Secrets-Constraints/credential-provider"
+	"github.com/Kilemonn/Secrets-Constraints/util"
 	"gopkg.in/yaml.v3"
 )
 
@@ -60,15 +61,48 @@ func ValidateConfiguration(configFilePath string) (providers []credential_provid
 
 func getProviders(credProviders []interface{}) (credentialProviders []credential_provider.CredentialProvider, err error) {
 	for _, val := range credProviders {
-		providerId := credential_provider.CredentialProviderIdentifierFromString(val.(string))
+		var provider credential_provider.CredentialProvider
+		provider, err = validateProvider(val.(map[string]interface{}))
+		if err != nil {
+			fmt.Printf("Failed to parse provider with error: [%s].\n", err.Error())
+			return
+		}
+
+		credentialProviders = append(credentialProviders, provider)
+		fmt.Printf("Registered credential provider with ID [%s].\n", provider.Identifier.String())
+	}
+	return
+}
+
+func validateProvider(providerMap map[string]interface{}) (provider credential_provider.CredentialProvider, err error) {
+	if len(providerMap) != 1 {
+		fmt.Println("Expected only len of 1 holding the provider name.")
+		err = fmt.Errorf("found more than one provider name")
+		return
+	}
+
+	for name, properties := range providerMap {
+		providerId := credential_provider.CredentialProviderIdentifierFromString(name)
 		if !providerId.IsValid() {
-			fmt.Printf("Failed to register credential provider with name [%s], pleaese provide only valid provider names.\n", val)
+			fmt.Printf("Failed to register credential provider with name [%s], pleaese provide only valid provider names.\n", name)
+			err = fmt.Errorf("invalid provider name [%s] provided", name)
+			return
+		}
+
+		var propertiesAsMap map[string]interface{}
+		if properties != nil {
+			propertiesAsMap = properties.(map[string]interface{})
 		} else {
-			provider := credential_provider.NewCredentialProvider(providerId)
-			credentialProviders = append(credentialProviders, provider)
-			fmt.Printf("Registered credential provider with ID [%s].\n", providerId.String())
+			propertiesAsMap = make(map[string]interface{})
+		}
+
+		provider, err = credential_provider.NewCredentialProvider(providerId, propertiesAsMap)
+		if err != nil {
+			fmt.Printf("Failed to construct provider because invalid properties were provided. Error: [%s].", err.Error())
+			return
 		}
 	}
+
 	return
 }
 
@@ -93,7 +127,7 @@ func validateConstraint(constraintMap map[string]interface{}) (constraintObj con
 	}
 
 	for name, properties := range constraintMap {
-		notContainedKeys := containsAllKeys([]string{yamlPropertyCondition, yamlPropertyPattern}, properties.(map[string]interface{}))
+		notContainedKeys := util.ContainsAllKeys([]string{yamlPropertyCondition, yamlPropertyPattern}, properties.(map[string]interface{}))
 		if len(notContainedKeys) != 0 {
 			fmt.Printf("Required properties [%s] are not defined for constraint with name [%s].", notContainedKeys, name)
 			err = fmt.Errorf("required properties [%s] are not defined for constraint with name [%s]", notContainedKeys, name)
@@ -107,14 +141,5 @@ func validateConstraint(constraintMap map[string]interface{}) (constraintObj con
 		}
 	}
 
-	return
-}
-
-func containsAllKeys(keys []string, m map[string]interface{}) (notContainedKeys []string) {
-	for _, k := range keys {
-		if _, exists := m[k]; !exists {
-			notContainedKeys = append(notContainedKeys, k)
-		}
-	}
 	return
 }

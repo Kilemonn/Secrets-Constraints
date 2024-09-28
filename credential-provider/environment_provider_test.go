@@ -13,17 +13,21 @@ func TestWithLoadedEnvironmentVars(t *testing.T) {
 
 	propertyName := "TestWithLoadedEnvironmentVars"
 	propertyValue := "A Value!"
-	assert.Empty(t, provider.GetCredentialWithName(propertyName))
+	_, err := provider.GetCredentialWithName(propertyName)
+	assert.Error(t, err)
 
 	withLoadedEnvironmentVars(t, map[string]string{propertyName: propertyValue}, func() {
 		newProvider := NewEnvironmentProvider()
 		assert.Greater(t, len(newProvider.GetCredentials()), initialLen)
 
-		assert.Equal(t, propertyValue, newProvider.GetCredentialWithName(propertyName))
+		cred, err := newProvider.GetCredentialWithName(propertyName)
+		assert.NoError(t, err)
+		assert.Equal(t, propertyValue, cred)
 	})
 
 	provider = NewEnvironmentProvider()
-	assert.Empty(t, provider.GetCredentialWithName(propertyName))
+	_, err = provider.GetCredentialWithName(propertyName)
+	assert.Error(t, err)
 	assert.Equal(t, initialLen, len(provider.GetCredentials()))
 }
 

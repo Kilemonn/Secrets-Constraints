@@ -35,4 +35,8 @@ func main() {
 			fmt.Println("")
 		}
 	}
+
+	for _, provider := range providers {
+		provider.Provider.Shutdown()
+	}
 }

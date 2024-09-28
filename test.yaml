@@ -1,6 +1,8 @@
 credential-providers:
-  # - GCP
-  - Env
+  - GCP:
+        project-id: <project_id>
+        credential-file-path: C:\Users\<user>\AppData\Roaming\gcloud\<credentials>.json
+  - Env:
 constraints:
     - all-are-unique:
         pattern: ALL

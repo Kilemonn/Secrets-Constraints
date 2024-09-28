@@ -8,7 +8,10 @@ import (
 
 func TestNoOpProvider(t *testing.T) {
 	provider := NewNoOpProvider()
-	assert.Empty(t, provider.GetCredentials())
-	assert.Empty(t, provider.GetCredentialNames())
-	assert.Empty(t, provider.GetCredentialWithName("test"))
+	names, err := provider.GetCredentialNames()
+	assert.NoError(t, err)
+	assert.Empty(t, names)
+	cred, err := provider.GetCredentialWithName("test")
+	assert.NoError(t, err)
+	assert.Empty(t, cred)
 }

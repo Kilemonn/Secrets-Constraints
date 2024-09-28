@@ -1,6 +1,7 @@
 package credential_provider
 
 import (
+	"errors"
 	"slices"
 	"strings"
 )
@@ -19,6 +20,10 @@ const (
 	aws        = "aws"
 	env        = "env"
 	kubernetes = "kubernetes"
+)
+
+var (
+	ErrCredentialNotFound = errors.New("credential with provided name was not found")
 )
 
 func credentialProviderIdentifierValues() []CredentialProviderIdentifier {
@@ -65,11 +70,13 @@ type CredentialProvider struct {
 	Provider   Provider
 }
 
-func NewCredentialProvider(id CredentialProviderIdentifier) (provider CredentialProvider) {
+func NewCredentialProvider(id CredentialProviderIdentifier, properties map[string]interface{}) (provider CredentialProvider, err error) {
 	provider.Identifier = id
 
 	if id == CredentialProviderIdentifierENV {
 		provider.Provider = NewEnvironmentProvider()
+	} else if id == CredentialProviderIdentifierGCP {
+		provider.Provider, err = NewGcpProvider(properties)
 	} else {
 		provider.Provider = NewNoOpProvider()
 	}
@@ -79,8 +86,7 @@ func NewCredentialProvider(id CredentialProviderIdentifier) (provider Credential
 
 // A credential provider's provider interface this determines how credentials are retrieved
 type Provider interface {
-	initialiseProvider()
-	GetCredentials() map[string]string
-	GetCredentialNames() []string
-	GetCredentialWithName(string) string
+	GetCredentialNames() ([]string, error)
+	GetCredentialWithName(string) (string, error)
+	Shutdown()
 }

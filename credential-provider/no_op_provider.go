@@ -4,22 +4,17 @@ type NoOpProvider struct {
 }
 
 func NewNoOpProvider() (provider NoOpProvider) {
-	provider.initialiseProvider()
-	return provider
+	return
 }
 
-func (p NoOpProvider) initialiseProvider() {
+func (p NoOpProvider) GetCredentialNames() ([]string, error) {
+	return []string{}, nil
+}
+
+func (p NoOpProvider) GetCredentialWithName(key string) (string, error) {
+	return "", nil
+}
+
+func (p NoOpProvider) Shutdown() {
 	// No-op
-}
-
-func (p NoOpProvider) GetCredentials() (creds map[string]string) {
-	return creds
-}
-
-func (p NoOpProvider) GetCredentialNames() (names []string) {
-	return names
-}
-
-func (p NoOpProvider) GetCredentialWithName(key string) string {
-	return ""
 }
