@@ -6,63 +6,9 @@ import (
 	"strings"
 )
 
-type ConditionType uint
-
-const (
-	ConditionTypeInvalid   ConditionType = iota
-	ConditionTypeUnique    ConditionType = iota
-	ConditionTypeHasPrefix ConditionType = iota
-	ConditionTypeHasSuffix ConditionType = iota
-	ConditionTypeIsNumeric ConditionType = iota
-	ConditionTypeIsBoolean ConditionType = iota
-)
-
-var (
-	// TODO: Create a new instance for each different constraint definition that uses Unique
-	// Need to create and hold this variable, since it's state needs to be retained
-	uniqueConditionAction UniqueConditionAction = NewUniqueConditionAction()
-)
-
-func ConditionTypeFromString(input string) ConditionType {
-	index := slices.Index(conditionTypeStrings(), strings.ToLower(input))
-	if index == -1 {
-		return ConditionTypeInvalid
-	} else {
-		return ConditionType(index)
-	}
-}
-
-func conditionTypeStrings() []string {
-	return []string{"invalid", "unique", "hasprefix", "hassuffix", "isnumeric", "isboolean"}
-}
-
-func (c ConditionType) IsValid() bool {
-	return c != ConditionTypeInvalid
-}
-
 type Condition struct {
 	Type ConditionType
 	Args []string
-}
-
-func (c ConditionType) expectedArgsCount() uint {
-	args := []uint{0, 0, 1, 1, 0, 0}
-	return args[uint(c)]
-}
-
-func (c ConditionType) conditionActions() []ConditionAction {
-	return []ConditionAction{
-		InvalidConditionAction{},
-		uniqueConditionAction,
-		HasPrefixConditionAction{},
-		HasSuffixConditionAction{},
-		IsNumericConditionAction{},
-		IsBooleanConditionAction{},
-	}
-}
-
-func (c ConditionType) getConditionAction() ConditionAction {
-	return c.conditionActions()[uint(c)]
 }
 
 func NewCondition(conditionString string) (condition Condition, err error) {
