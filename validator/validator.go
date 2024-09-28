@@ -17,14 +17,13 @@ func ExecuteConstraintsAgainstProviders(providers []credential_provider.Credenti
 			return failed
 		}
 		for _, credentialName := range credentialNames {
+			credential, err := provider.Provider.GetCredentialWithName(credentialName)
+			if err != nil {
+				fmt.Printf("Failed to retrieve credential with name [%s] from provider [%s] with error [%s].", credentialName, provider.Identifier.String(), err.Error())
+				return failed
+			}
 			for _, constraint := range constraints {
 				if constraint.Pattern.Matches(credentialName) {
-					credential, err := provider.Provider.GetCredentialWithName(credentialName)
-					if err != nil {
-						fmt.Printf("Failed to retrieve credential with name [%s] from provider [%s] with error [%s].", credentialName, provider.Identifier.String(), err.Error())
-						return failed
-					}
-
 					if !constraint.Condition.ApplyCondition(credential) {
 						// fmt.Printf("Fail - Provider [%s], Constraint [%s], Credential [%s].\n", provider.Identifier.String(), constraint.Name, credentialName)
 						if _, exists := failed[constraint.Name]; !exists {

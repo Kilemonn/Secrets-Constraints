@@ -83,6 +83,8 @@ func NewCredentialProvider(id CredentialProviderIdentifier, properties map[strin
 		provider.Provider = NewEnvironmentProvider()
 	} else if id == CredentialProviderIdentifierGCP {
 		provider.Provider, err = NewGcpProvider(properties)
+	} else if id == CredentialProviderIdentifierAWS {
+		provider.Provider, err = NewAwsProvider(properties)
 	} else {
 		provider.Provider = NewNoOpProvider()
 	}

@@ -15,7 +15,7 @@ type AwsProvider struct {
 	client *secretsmanager.Client
 }
 
-func NewAwsProvider(properties map[string]string) (provider AwsProvider, err error) {
+func NewAwsProvider(properties map[string]interface{}) (provider AwsProvider, err error) {
 	provider.ctx = context.Background()
 	provider.cfg, err = config.LoadDefaultConfig(context.TODO())
 	if err != nil {
@@ -39,14 +39,15 @@ func (p AwsProvider) GetCredentialNames() ([]string, error) {
 		if err != nil {
 			return []string{}, err
 		}
-		if resp.NextToken == nil {
-			return names, nil
-		}
-
-		nextToken = resp.NextToken
 
 		for _, s := range resp.SecretList {
 			names = append(names, *s.Name)
+		}
+
+		if resp.NextToken == nil {
+			return names, nil
+		} else {
+			nextToken = resp.NextToken
 		}
 	}
 }
