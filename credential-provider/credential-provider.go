@@ -15,11 +15,11 @@ const (
 	CredentialProviderIdentifierENV        CredentialProviderIdentifier = iota
 	CredentialProviderIdentifierKubernetes CredentialProviderIdentifier = iota
 
-	invalid    = "invalid"
-	gcp        = "gcp"
-	aws        = "aws"
-	env        = "env"
-	kubernetes = "kubernetes"
+	provider_identifier_invalid_string    = "invalid"
+	provider_identifier_gcp_string        = "gcp"
+	provider_identifier_aws_string        = "aws"
+	provider_identifier_env_string        = "env"
+	provider_identifier_kubernetes_string = "kubernetes"
 )
 
 var (
@@ -37,7 +37,13 @@ func credentialProviderIdentifierValues() []CredentialProviderIdentifier {
 }
 
 func credentialProviderIdentifierStrings() []string {
-	return []string{invalid, gcp, aws, env, kubernetes}
+	return []string{
+		provider_identifier_invalid_string,
+		provider_identifier_gcp_string,
+		provider_identifier_aws_string,
+		provider_identifier_env_string,
+		provider_identifier_kubernetes_string,
+	}
 }
 
 func CredentialProviderIdentifierFromString(input string) CredentialProviderIdentifier {
