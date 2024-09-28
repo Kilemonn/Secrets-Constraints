@@ -74,13 +74,12 @@ func (p GcpProvider) GetCredentialWithName(key string) (string, error) {
 	result, err := p.client.AccessSecretVersion(p.ctx, credentialRequest)
 	if err != nil {
 		fmt.Printf("Failed to retrieve credential with name [%s] with error: [%s].\n", key, err.Error())
-		return "", ErrCredentialNotFound
+		return "", err
 	}
 	crc32c := crc32.MakeTable(crc32.Castagnoli)
 	checksum := int64(crc32.Checksum(result.Payload.Data, crc32c))
 	if checksum != *result.Payload.DataCrc32C {
-		fmt.Println("Data corruption detected.")
-		return "", ErrCredentialNotFound
+		return "", fmt.Errorf("check sum verification failed on property with name [%s]", key)
 	}
 
 	return string(result.Payload.Data), nil
