@@ -31,11 +31,12 @@ type UniqueConditionAction struct {
 	seenValues map[string]bool
 }
 
-func (a UniqueConditionAction) CheckCondition(input string, args []string) bool {
-	if a.seenValues == nil {
-		a.seenValues = make(map[string]bool)
-	}
+func NewUniqueConditionAction() (a UniqueConditionAction) {
+	a.seenValues = make(map[string]bool)
+	return
+}
 
+func (a UniqueConditionAction) CheckCondition(input string, args []string) bool {
 	if _, exists := a.seenValues[input]; exists {
 		return false
 	} else {

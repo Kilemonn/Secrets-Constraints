@@ -20,7 +20,7 @@ const (
 var (
 	// TODO: Create a new instance for each different constraint definition that uses Unique
 	// Need to create and hold this variable, since it's state needs to be retained
-	uniqueConditionAction UniqueConditionAction = UniqueConditionAction{}
+	uniqueConditionAction UniqueConditionAction = NewUniqueConditionAction()
 )
 
 func ConditionTypeFromString(input string) ConditionType {
