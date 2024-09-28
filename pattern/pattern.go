@@ -1,4 +1,4 @@
-package constraint
+package pattern
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	all_pattern = "ALL"
+	ALL_PATTERN = "ALL"
 )
 
 type Pattern struct {
@@ -26,7 +26,7 @@ func NewPattern(p string) (pattern Pattern, err error) {
 }
 
 func (p Pattern) Matches(input string) bool {
-	if p.pattern == all_pattern {
+	if p.pattern == ALL_PATTERN {
 		return true
 	}
 	if p.regex == nil {

@@ -77,6 +77,7 @@ func NewCredentialProvider(id CredentialProviderIdentifier) (provider Credential
 	return
 }
 
+// A credential provider's provider interface this determines how credentials are retrieved
 type Provider interface {
 	initialiseProvider()
 	GetCredentials() map[string]string

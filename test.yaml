@@ -4,7 +4,7 @@ credential-providers:
 constraints:
     - all-are-unique:
         pattern: ALL
-        condition: UNIQUE
+        condition: Unique
     - db-strings-have-prefix:
         pattern: db-connection-string-.*
         condition: HasPrefix(jdbc://a.domain.to.db/)

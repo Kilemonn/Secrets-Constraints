@@ -1,4 +1,4 @@
-package constraint
+package pattern
 
 import (
 	"testing"

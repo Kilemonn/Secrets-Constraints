@@ -1,17 +1,22 @@
 package constraint
 
+import (
+	"github.com/Kilemonn/Secrets-Constraints/condition"
+	"github.com/Kilemonn/Secrets-Constraints/pattern"
+)
+
 type Constraint struct {
 	Name      string
-	Pattern   Pattern
-	Condition Condition
+	Pattern   pattern.Pattern
+	Condition condition.Condition
 }
 
-func NewConstraint(name string, pattern string, condition string) (constraint Constraint, err error) {
-	conditionObj, err := NewCondition(condition)
+func NewConstraint(name string, patternString string, conditionString string) (constraint Constraint, err error) {
+	conditionObj, err := condition.NewCondition(conditionString)
 	if err != nil {
 		return
 	}
-	patternObj, err := NewPattern(pattern)
+	patternObj, err := pattern.NewPattern(patternString)
 	if err != nil {
 		return
 	}
