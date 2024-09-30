@@ -2,6 +2,7 @@ package credential_provider
 
 import (
 	"errors"
+	"fmt"
 	"slices"
 	"strings"
 )
@@ -85,8 +86,10 @@ func NewCredentialProvider(id CredentialProviderIdentifier, properties map[strin
 		provider.Provider, err = NewGcpProvider(properties)
 	} else if id == CredentialProviderIdentifierAWS {
 		provider.Provider, err = NewAwsProvider(properties)
+	} else if id == CredentialProviderIdentifierKubernetes {
+		provider.Provider, err = NewKubernetesProvider()
 	} else {
-		provider.Provider = NewNoOpProvider()
+		err = fmt.Errorf("invalid provider identifier found [%s]", id.String())
 	}
 
 	return

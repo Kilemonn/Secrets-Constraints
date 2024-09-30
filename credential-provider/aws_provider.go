@@ -2,7 +2,7 @@ package credential_provider
 
 import (
 	"context"
-	"log"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -19,7 +19,8 @@ func NewAwsProvider(properties map[string]interface{}) (provider AwsProvider, er
 	provider.ctx = context.Background()
 	provider.cfg, err = config.LoadDefaultConfig(context.TODO())
 	if err != nil {
-		log.Fatalf("failed to load configuration, %v", err)
+		fmt.Printf("failed to load aws configuration, %s\n", err.Error())
+		return
 	}
 
 	client := secretsmanager.NewFromConfig(provider.cfg)
