@@ -22,6 +22,11 @@ Installation of the commandline tool can be done with the following command:
 
 The application requires a `.yaml` configuration file that defines the credential providers along with the constraints that you want to perform on each credential.
 
+The application can be run using the following command (using -f to specify the file path):
+> Secrets-Constraints.exe -f path/to/file.yaml
+
+**You can also pass in `-d` to enable debug to log all constraint and pattern matching output.**
+
 Using the environment as an example we can define the following `yaml` configuration file to check that the database properties are set correctly (this is an example to demonstrate what kind of validation is available).
 
 ``` yaml
@@ -50,8 +55,8 @@ There is an "ALL" `pattern` keyword that will force match against all entries. I
 The constraints that are supported are:
 
 - **Unique** - That the value of this property is unique across all matching credentials.
-- **HasPrefix(<prefix-string>)** - Check it has the supplied prefix.
-- **HasSuffix(<suffix-string>)** - Check it has the supplied suffix.
+- **HasPrefix(\<prefix-string\>)** - Check it has the supplied prefix.
+- **HasSuffix(\<suffix-string\>)** - Check it has the supplied suffix.
 - **IsNumber** - Check value is numeric.
 - **IsBoolean** - Check value is a boolean.
 
