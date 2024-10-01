@@ -41,41 +41,32 @@ func NewKubernetesProvider(properties map[string]interface{}) (provider Kubernet
 		kubeConfigPath := filepath.Join(home, ".kube", "config")
 		var config *rest.Config
 		config, err = clientcmd.BuildConfigFromFlags("", kubeConfigPath)
-		// config, err := rest.InClusterConfig()
 		if err != nil {
 			return
 		}
-
 		provider.client, err = kubernetes.NewForConfig(config)
-		if err != nil {
-			return
-		}
 	} else {
-		err = fmt.Errorf("unable to find .kube/config file")
+		err = fmt.Errorf("unable to determine home directory for the current user to find the path to /.kube/config")
 	}
 
 	return
 }
 
 func (p KubernetesProvider) GetCredentialNames() ([]string, error) {
-	client := p.client.CoreV1()
-	secrets := client.Secrets(p.namespace)
-	secret, err := secrets.Get(p.ctx, p.secretName, v1.GetOptions{})
+	client := p.client.CoreV1().Secrets(p.namespace)
+	secret, err := client.Get(p.ctx, p.secretName, v1.GetOptions{})
 	if err != nil {
 		return []string{}, err
 	}
-
 	return maps.Keys(secret.Data), nil
 }
 
 func (p KubernetesProvider) GetCredentialWithName(key string) (string, error) {
-	client := p.client.CoreV1()
-	secrets := client.Secrets(p.namespace)
-	secret, err := secrets.Get(p.ctx, p.secretName, v1.GetOptions{})
+	client := p.client.CoreV1().Secrets(p.namespace)
+	secret, err := client.Get(p.ctx, p.secretName, v1.GetOptions{})
 	if err != nil {
 		return "", err
 	}
-
 	return string(secret.Data[key]), nil
 }
 

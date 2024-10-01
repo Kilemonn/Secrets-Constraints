@@ -7,6 +7,7 @@ import (
 )
 
 func TestKubernetesProvider(t *testing.T) {
+	t.Skip("Skipping since we cannot guarantee the local kubernetes environment is correctly setup")
 	m := make(map[string]interface{})
 	m[property_namespace] = "default"
 	m[property_secret_name] = "my-kubernetes-secret"
