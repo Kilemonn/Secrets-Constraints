@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	property_region string = "region"
+	property_region  string = "region"
+	property_profile string = "profile"
 )
 
 type AwsProvider struct {
@@ -21,14 +22,14 @@ type AwsProvider struct {
 }
 
 func NewAwsProvider(properties map[string]interface{}) (provider AwsProvider, err error) {
-	requiredProperties := []string{property_region}
+	requiredProperties := []string{property_region, property_profile}
 	notContained := util.ContainsAllKeys(requiredProperties, properties)
 	if len(notContained) > 0 {
 		err = fmt.Errorf("missing properties %s, for AWS provider", notContained)
 		return
 	}
 	provider.ctx = context.Background()
-	provider.cfg, err = config.LoadDefaultConfig(context.TODO(), config.WithRegion(properties[property_region].(string)))
+	provider.cfg, err = config.LoadDefaultConfig(context.TODO(), config.WithRegion(properties[property_region].(string)), config.WithSharedConfigProfile(properties[property_profile].(string)))
 	if err != nil {
 		fmt.Printf("failed to load aws configuration, %s\n", err.Error())
 		return
