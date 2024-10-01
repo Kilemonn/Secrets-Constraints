@@ -4,9 +4,14 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Kilemonn/Secrets-Constraints/util"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
+)
+
+const (
+	property_region string = "region"
 )
 
 type AwsProvider struct {
@@ -16,8 +21,14 @@ type AwsProvider struct {
 }
 
 func NewAwsProvider(properties map[string]interface{}) (provider AwsProvider, err error) {
+	requiredProperties := []string{property_region}
+	notContained := util.ContainsAllKeys(requiredProperties, properties)
+	if len(notContained) > 0 {
+		err = fmt.Errorf("missing properties %s, for GCP provider", notContained)
+		return
+	}
 	provider.ctx = context.Background()
-	provider.cfg, err = config.LoadDefaultConfig(context.TODO())
+	provider.cfg, err = config.LoadDefaultConfig(context.TODO(), config.WithRegion(properties[property_region].(string)))
 	if err != nil {
 		fmt.Printf("failed to load aws configuration, %s\n", err.Error())
 		return
