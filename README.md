@@ -1,4 +1,4 @@
-# Secrets-Constraints
+# Secrets-Validator
 
 ## Overview
 
@@ -10,20 +10,20 @@ The current credential providers that are supported are:
 - Kubernetes Secrets
 - The local machine environment variables
 
-### Please refer to the [Wiki](https://github.com/Kilemonn/Secrets-Constraints/wiki) for more details!
+### Please refer to the [Wiki](https://github.com/Kilemonn/Secrets-Validator/wiki) for more details!
 
 ## Quick Start
 
 Installation of the commandline tool can be done with the following command:
 
-> go install github.com/Kilemonn/Secrets-Constraints@latest
+> go install github.com/Kilemonn/Secrets-Validator@latest
 
 ## Usage
 
 The application requires a `.yaml` configuration file that defines the credential providers along with the constraints that you want to perform on each credential.
 
 The application can be run using the following command (using -f to specify the file path):
-> Secrets-Constraints.exe -f path/to/file.yaml
+> Secrets-Validator.exe -f path/to/file.yaml
 
 **You can also pass in `-d` to enable debug to log all constraint and pattern matching output.**
 
@@ -62,4 +62,4 @@ The constraints that are supported are:
 
 ## Further Documentation in the Wiki
 
-Please refer to the [Wiki](https://github.com/Kilemonn/Secrets-Constraints/wiki) for more documentation about how to configure different credential providers and their different usages.
+Please refer to the [Wiki](https://github.com/Kilemonn/Secrets-Validator/wiki) for more documentation about how to configure different credential providers and their different usages.

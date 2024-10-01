@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/Kilemonn/Secrets-Constraints/util"
+	"github.com/Kilemonn/Secrets-Validator/util"
 	"golang.org/x/exp/maps"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"

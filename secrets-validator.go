@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/Kilemonn/Secrets-Constraints/config"
-	"github.com/Kilemonn/Secrets-Constraints/consts"
-	"github.com/Kilemonn/Secrets-Constraints/validator"
+	"github.com/Kilemonn/Secrets-Validator/config"
+	"github.com/Kilemonn/Secrets-Validator/consts"
+	"github.com/Kilemonn/Secrets-Validator/validator"
 )
 
 func main() {

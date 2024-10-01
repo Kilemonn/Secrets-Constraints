@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Kilemonn/Secrets-Constraints/constraint"
-	credential_provider "github.com/Kilemonn/Secrets-Constraints/credential-provider"
-	"github.com/Kilemonn/Secrets-Constraints/util"
+	"github.com/Kilemonn/Secrets-Validator/constraint"
+	credential_provider "github.com/Kilemonn/Secrets-Validator/credential-provider"
+	"github.com/Kilemonn/Secrets-Validator/util"
 	"gopkg.in/yaml.v3"
 )
 

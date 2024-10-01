@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/secrets-constraints.go",
+            "program": "${workspaceFolder}/secrets-validator.go",
             "args": ["-f", "test.yaml", "-d"],
             "showLog": true
         }

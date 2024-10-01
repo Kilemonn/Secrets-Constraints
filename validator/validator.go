@@ -3,8 +3,8 @@ package validator
 import (
 	"fmt"
 
-	"github.com/Kilemonn/Secrets-Constraints/constraint"
-	credential_provider "github.com/Kilemonn/Secrets-Constraints/credential-provider"
+	"github.com/Kilemonn/Secrets-Validator/constraint"
+	credential_provider "github.com/Kilemonn/Secrets-Validator/credential-provider"
 )
 
 func ExecuteConstraintsAgainstProviders(providers []credential_provider.CredentialProvider, constraints []constraint.Constraint, debugLog bool) map[string][]string {

@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	condition_action "github.com/Kilemonn/Secrets-Constraints/condition/condition-action"
+	condition_action "github.com/Kilemonn/Secrets-Validator/condition/condition-action"
 )
 
 type ConditionType uint

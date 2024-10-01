@@ -1,8 +1,8 @@
 package constraint
 
 import (
-	"github.com/Kilemonn/Secrets-Constraints/condition"
-	"github.com/Kilemonn/Secrets-Constraints/pattern"
+	"github.com/Kilemonn/Secrets-Validator/condition"
+	"github.com/Kilemonn/Secrets-Validator/pattern"
 )
 
 type Constraint struct {

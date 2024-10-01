@@ -1,4 +1,4 @@
-module github.com/Kilemonn/Secrets-Constraints
+module github.com/Kilemonn/Secrets-Validator
 
 go 1.22.4
 

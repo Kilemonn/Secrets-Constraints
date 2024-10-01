@@ -7,7 +7,7 @@ import (
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
-	"github.com/Kilemonn/Secrets-Constraints/util"
+	"github.com/Kilemonn/Secrets-Validator/util"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
