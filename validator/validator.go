@@ -7,7 +7,7 @@ import (
 	credential_provider "github.com/Kilemonn/Secrets-Constraints/credential-provider"
 )
 
-func ExecuteConstraintsAgainstProviders(providers []credential_provider.CredentialProvider, constraints []constraint.Constraint) map[string][]string {
+func ExecuteConstraintsAgainstProviders(providers []credential_provider.CredentialProvider, constraints []constraint.Constraint, debugLog bool) map[string][]string {
 	failed := make(map[string][]string)
 
 	for _, provider := range providers {
@@ -24,14 +24,26 @@ func ExecuteConstraintsAgainstProviders(providers []credential_provider.Credenti
 			}
 			for _, constraint := range constraints {
 				if constraint.Pattern.Matches(credentialName) {
+					if debugLog {
+						fmt.Printf("Credential [%s] matched constraint [%s], applying condition...\n", credentialName, constraint.Name)
+					}
 					if !constraint.Condition.ApplyCondition(credential) {
-						// fmt.Printf("Fail - Provider [%s], Constraint [%s], Credential [%s].\n", provider.Identifier.String(), constraint.Name, credentialName)
+						if debugLog {
+							fmt.Printf("Fail - Provider [%s], Constraint [%s], Credential [%s].\n", provider.Identifier.String(), constraint.Name, credentialName)
+						}
+
 						if _, exists := failed[constraint.Name]; !exists {
 							failed[constraint.Name] = make([]string, 0)
 						}
 						failed[constraint.Name] = append(failed[constraint.Name], credentialName)
 					} else {
-						// fmt.Printf("Pass - Provider [%s], Constraint [%s], Credential [%s].\n", provider.Identifier.String(), constraint.Name, credentialName)
+						if debugLog {
+							fmt.Printf("Pass - Provider [%s], Constraint [%s], Credential [%s].\n", provider.Identifier.String(), constraint.Name, credentialName)
+						}
+					}
+				} else {
+					if debugLog {
+						fmt.Printf("Credential with name [%s] did not match on constraint [%s].\n", credentialName, constraint.Name)
 					}
 				}
 			}

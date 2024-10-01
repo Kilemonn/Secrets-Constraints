@@ -11,7 +11,9 @@ import (
 
 func main() {
 	var configFilePath string
+	var debugLog bool
 	flag.StringVar(&configFilePath, consts.ARG_FILE_PATH, "", "configuration file path")
+	flag.BoolVar(&debugLog, consts.ARG_DEBUG, false, "enable debug logging")
 	flag.Parse()
 
 	if configFilePath == "" {
@@ -24,7 +26,7 @@ func main() {
 		fmt.Printf("Failed to initialise constraints and/or providers. Error: [%s].\n", err.Error())
 	}
 
-	failedConstraints := validator.ExecuteConstraintsAgainstProviders(providers, constraints)
+	failedConstraints := validator.ExecuteConstraintsAgainstProviders(providers, constraints, debugLog)
 	if len(failedConstraints) > 0 {
 		fmt.Printf("Validation failed, the following constraints failed on the following entries:\n")
 		for key, val := range failedConstraints {

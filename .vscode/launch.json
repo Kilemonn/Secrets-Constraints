@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/secrets-constraints.go",
-            "args": ["-f", "test.yaml"],
+            "args": ["-f", "test.yaml", "-d"],
             "showLog": true
         }
     ]

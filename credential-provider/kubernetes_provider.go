@@ -33,7 +33,7 @@ func NewKubernetesProvider(properties map[string]interface{}) (provider Kubernet
 		err = fmt.Errorf("missing properties %s, for Kubernetes provider", notContained)
 		return
 	}
-
+	provider.ctx = context.Background()
 	provider.namespace = properties[property_namespace].(string)
 	provider.secretName = properties[property_secret_name].(string)
 
@@ -65,7 +65,7 @@ func (p KubernetesProvider) GetCredentialNames() ([]string, error) {
 		return []string{}, err
 	}
 
-	return maps.Keys(secret.StringData), nil
+	return maps.Keys(secret.Data), nil
 }
 
 func (p KubernetesProvider) GetCredentialWithName(key string) (string, error) {
@@ -76,7 +76,7 @@ func (p KubernetesProvider) GetCredentialWithName(key string) (string, error) {
 		return "", err
 	}
 
-	return secret.StringData[key], nil
+	return string(secret.Data[key]), nil
 }
 
 func (p KubernetesProvider) Shutdown() {
