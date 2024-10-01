@@ -29,19 +29,19 @@ func NewGcpProvider(properties map[string]interface{}) (provider GcpProvider, er
 	notContained := util.ContainsAllKeys(requiredProperties, properties)
 	if len(notContained) > 0 {
 		err = fmt.Errorf("missing properties %s, for GCP provider", notContained)
-	} else {
-		provider.projectId = properties[property_project_id].(string)
-		provider.credentialFilePath = properties[property_credential_file_path].(string)
-
-		provider.ctx = context.Background()
-		var client *secretmanager.Client
-		client, err = secretmanager.NewClient(provider.ctx, option.WithCredentialsFile(provider.credentialFilePath))
-		if err != nil {
-			return
-		}
-
-		provider.client = client
+		return
 	}
+
+	provider.projectId = properties[property_project_id].(string)
+	provider.credentialFilePath = properties[property_credential_file_path].(string)
+
+	provider.ctx = context.Background()
+	var client *secretmanager.Client
+	client, err = secretmanager.NewClient(provider.ctx, option.WithCredentialsFile(provider.credentialFilePath))
+	if err != nil {
+		return
+	}
+	provider.client = client
 	return
 }
 

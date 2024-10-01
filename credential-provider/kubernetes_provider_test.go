@@ -7,7 +7,10 @@ import (
 )
 
 func TestKubernetesProvider(t *testing.T) {
-	provider, err := NewKubernetesProvider()
+	m := make(map[string]interface{})
+	m[property_namespace] = "default"
+	m[property_secret_name] = "my-kubernetes-secret"
+	provider, err := NewKubernetesProvider(m)
 	assert.NoError(t, err)
 
 	val, err := provider.GetCredentialWithName("my-kubernetes-secret")

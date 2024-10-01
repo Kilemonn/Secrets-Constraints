@@ -87,7 +87,7 @@ func NewCredentialProvider(id CredentialProviderIdentifier, properties map[strin
 	} else if id == CredentialProviderIdentifierAWS {
 		provider.Provider, err = NewAwsProvider(properties)
 	} else if id == CredentialProviderIdentifierKubernetes {
-		provider.Provider, err = NewKubernetesProvider()
+		provider.Provider, err = NewKubernetesProvider(properties)
 	} else {
 		err = fmt.Errorf("invalid provider identifier found [%s]", id.String())
 	}

@@ -24,7 +24,7 @@ func NewAwsProvider(properties map[string]interface{}) (provider AwsProvider, er
 	requiredProperties := []string{property_region}
 	notContained := util.ContainsAllKeys(requiredProperties, properties)
 	if len(notContained) > 0 {
-		err = fmt.Errorf("missing properties %s, for GCP provider", notContained)
+		err = fmt.Errorf("missing properties %s, for AWS provider", notContained)
 		return
 	}
 	provider.ctx = context.Background()

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/Kilemonn/Secrets-Constraints/util"
 	"golang.org/x/exp/maps"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -13,17 +14,34 @@ import (
 	"k8s.io/client-go/util/homedir"
 )
 
+const (
+	property_namespace   = "namespace"
+	property_secret_name = "secret-name"
+)
+
 type KubernetesProvider struct {
-	ctx       context.Context
-	client    kubernetes.Interface
-	namespace string
+	ctx        context.Context
+	client     kubernetes.Interface
+	namespace  string
+	secretName string
 }
 
-func NewKubernetesProvider() (provider KubernetesProvider, err error) {
+func NewKubernetesProvider(properties map[string]interface{}) (provider KubernetesProvider, err error) {
+	requiredProperties := []string{property_namespace, property_secret_name}
+	notContained := util.ContainsAllKeys(requiredProperties, properties)
+	if len(notContained) > 0 {
+		err = fmt.Errorf("missing properties %s, for Kubernetes provider", notContained)
+		return
+	}
+
+	provider.namespace = properties[property_namespace].(string)
+	provider.secretName = properties[property_secret_name].(string)
+
 	if home := homedir.HomeDir(); home != "" {
 		kubeConfigPath := filepath.Join(home, ".kube", "config")
 		var config *rest.Config
 		config, err = clientcmd.BuildConfigFromFlags("", kubeConfigPath)
+		// config, err := rest.InClusterConfig()
 		if err != nil {
 			return
 		}
@@ -32,7 +50,6 @@ func NewKubernetesProvider() (provider KubernetesProvider, err error) {
 		if err != nil {
 			return
 		}
-		provider.namespace = "default"
 	} else {
 		err = fmt.Errorf("unable to find .kube/config file")
 	}
@@ -41,29 +58,25 @@ func NewKubernetesProvider() (provider KubernetesProvider, err error) {
 }
 
 func (p KubernetesProvider) GetCredentialNames() ([]string, error) {
-	names := []string{}
 	client := p.client.CoreV1()
 	secrets := client.Secrets(p.namespace)
-	list, err := secrets.List(p.ctx, v1.ListOptions{})
+	secret, err := secrets.Get(p.ctx, p.secretName, v1.GetOptions{})
 	if err != nil {
-		return names, err
+		return []string{}, err
 	}
 
-	for _, item := range list.Items {
-		names = append(names, maps.Values(item.StringData)[0])
-	}
-	return names, nil
+	return maps.Keys(secret.StringData), nil
 }
 
 func (p KubernetesProvider) GetCredentialWithName(key string) (string, error) {
 	client := p.client.CoreV1()
 	secrets := client.Secrets(p.namespace)
-	secret, err := secrets.Get(p.ctx, key, v1.GetOptions{})
+	secret, err := secrets.Get(p.ctx, p.secretName, v1.GetOptions{})
 	if err != nil {
 		return "", err
 	}
 
-	return maps.Values(secret.StringData)[0], nil
+	return secret.StringData[key], nil
 }
 
 func (p KubernetesProvider) Shutdown() {
