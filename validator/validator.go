@@ -25,7 +25,7 @@ func ExecuteConstraintsAgainstProviders(providers []credential_provider.Credenti
 			for _, constraint := range constraints {
 				if constraint.Pattern.Matches(credentialName) {
 					if debugLog {
-						fmt.Printf("Credential [%s] matched constraint [%s], applying condition...\n", credentialName, constraint.Name)
+						fmt.Printf("Credential [%s] matched pattern for constraint [%s], applying condition...\n", credentialName, constraint.Name)
 					}
 					if !constraint.Condition.ApplyCondition(credential) {
 						if debugLog {
@@ -43,7 +43,7 @@ func ExecuteConstraintsAgainstProviders(providers []credential_provider.Credenti
 					}
 				} else {
 					if debugLog {
-						fmt.Printf("Credential with name [%s] did not match on constraint [%s].\n", credentialName, constraint.Name)
+						fmt.Printf("Credential with name [%s] did not match on pattern for constraint [%s].\n", credentialName, constraint.Name)
 					}
 				}
 			}
